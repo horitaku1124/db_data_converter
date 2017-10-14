@@ -1,3 +1,5 @@
+"use strict";
+
 const assert = require('assert');
 const queryParser = require('../js/query_parser');
 
