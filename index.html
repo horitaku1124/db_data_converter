@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>DB Data Converter</title>
+</head>
+<body>
+<section>
+<textarea id="inputSection">
+# id, name, status
+'1', 'Name1', 'ok'
+'2', 'Name2', 'ng'
+'3', 'Name3', 'ok'
+'4', '', NULL
+</textarea>
+    <br />
+    <input type="button" id="perform_from_wb" value="From Workbench">
+    &nbsp;
+    <input type="button" id="perform_from_sql" value="From SQL">
+</section>
+<section id="displayTable"></section>
+<section>
+    <div>
+        <input type="text" placeholder="table name" id="table_name">
+    </div>
+    <div>
+        <input type="button" id="generate" value="SQL" disabled="disabled">
+        <label>
+            <input type="checkbox" id="combine_1_query">
+            combine to 1query
+        </label>
+    </div>
+    <div>
+        <!--<textarea id="output"></textarea>-->
+        <pre id="outputText"></pre>
+    </div>
+</section>
+</body>
+</html>

@@ -1,0 +1,22 @@
+{
+  "name": "db_data_converter",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bundle.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/horitaku1124/db_data_converter.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/horitaku1124/db_data_converter/issues"
+  },
+  "homepage": "https://github.com/horitaku1124/db_data_converter#readme",
+  "devDependencies": {
+    "mocha": "^4.0.1"
+  }
+}
