@@ -36,6 +36,6 @@ jobs:
       # run tests!
       - run: webpack && yarn test
 
-      dependencies:
+      - dependencies:
         override:
           - yarn global add webpack
