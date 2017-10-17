@@ -27,11 +27,11 @@ jobs:
           - v1-dependencies-
 
       - run:
-          name: Update npm
+          name: install dependencies
           command: yarn install
-          
+
       - run:
-          name: Update npm
+          name: install global dependencies
           command: 'sudo npm install -g webpack'
 
       - save_cache:
