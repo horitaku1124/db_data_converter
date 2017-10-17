@@ -1,0 +1,87 @@
+#inputSection, #outputText {
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 12px;
+}
+#inputSection {
+    height: 100px;
+}
+#outputText {
+    height: 100px;
+    overflow: scroll;
+}
+.hidden {
+    display: none;
+}
+
+#displayTable {
+    width: 100%;
+    height: 300px;
+    overflow: scroll;
+}
+
+#displayTable > table {
+    border-collapse: collapse;
+}
+#displayTable > table > * > tr > th {
+    background-color: #e4e4e4;
+    max-width: 100px;
+    position: relative;
+}
+#displayTable > table > * > tr > th .text_area {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    font-size: 0.95rem;
+    width: 100%;
+    display: block;
+}
+#displayTable > table > * > tr > th .menu_toggle{
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    cursor: pointer;
+}
+#displayTable > table > * > tr > th .menu_action{
+    position: absolute;
+    right: 0;
+    bottom: -58px;
+    cursor: pointer;
+    display: none;
+    z-index: 100;
+    background-color: white;
+    padding: 10px 5px;
+    border: 1px solid #ccc;
+}
+#displayTable > table > * > tr > th,#displayTable > table > * > tr > td {
+    border: 1px solid #aaa;
+    width: 40px;
+    min-width: 80px;
+    padding: 3px 10px 3px 3px;
+}
+#displayTable > table > * > tr > td{
+    position: relative;
+}
+#displayTable > table > * > tr > td .editable{
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 40px;
+}
+#displayTable > table > * > tr:nth-child(2n) > td {
+    background-color: #fef9ff;
+}
+
+.type_selector {
+    position: absolute;
+    bottom:0;
+    right: 0;
+    background-color: #f7f7f7;
+    font-size: 0.75rem;
+    padding: 1px 5px;
+}
+
+#displayTable td:hover .type_selector {
+    /*display: none;*/
+    width: 10px;
+    overflow: hidden;
+    cursor: pointer;
+}
