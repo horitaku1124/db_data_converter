@@ -253,7 +253,7 @@ function onGenerate() {
                     e = e.value.replace(/</g, '&lt;').replace(/>/g, '&gt;');
                     return "'" + e + "'";
                 }
-            }).join(",")).join(")\r\n(");
+            }).join(",")).join("),\r\n(");
         outputSql += ");"
     } else {
         for (let row of bodyData) {
