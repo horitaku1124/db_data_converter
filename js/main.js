@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('loaded2');
     let performFromWb = document.getElementById('perform_from_wb');
     let performFromSql = document.getElementById('perform_from_sql');
+    let outputText = document.getElementById('outputText');
     let generate = document.getElementById('generate');
     performFromWb.addEventListener('click', (e) => {
         onPerform();
@@ -18,6 +19,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     generate.addEventListener('click', (e) => {
         onGenerate();
+    });
+    outputText.addEventListener('dblclick', (e) => {
+        console.log("dblclick", this);
+        let range = document.createRange();
+        range.selectNode(outputText);
+        window.getSelection().removeAllRanges();
+        window.getSelection().addRange(range);
     });
 });
 

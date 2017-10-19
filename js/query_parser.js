@@ -8,9 +8,6 @@ module.exports = class QueryParser {
     {
         this._global = global;
     }
-    test() {
-        return constant.TYPE_NONE;
-    }
     static exeVerse(type, queryTokens, verse) {
         if(type === constant.TYPE_COLUMN) {
             queryTokens.columns.push(verse);
