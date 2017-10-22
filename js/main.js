@@ -428,6 +428,9 @@ function selectWindow(array, callback) {
     });
 }
 function inputWindow(callback, doFocus = false) {
+    let dispose = () => {
+        inputWindow.style.display = 'none';
+    };
     let inputWindow = document.getElementById('inputWindowArea');
     if(!inputWindow) {
         inputWindow = document.createElement('div');
@@ -445,7 +448,7 @@ function inputWindow(callback, doFocus = false) {
     goButton.setAttribute('type', 'button');
     goButton.setAttribute('value', 'Apply');
     goButton.addEventListener('click', () => {
-        inputWindow.style.display = 'none';
+        dispose();
         callback(inputText.value);
     });
 
@@ -456,6 +459,19 @@ function inputWindow(callback, doFocus = false) {
         if (event.key === 'Escape') {
             inputWindow.style.display = 'none';
         }
+    });
+    let lastKeyDown = -1;
+    inputWindow.addEventListener('keyup', function(event) {
+        // console.log('keyup', event.key, event.keyCode, 'lastKeyDown=' + lastKeyDown);
+        if (lastKeyDown !== 229 && event.key === 'Enter') {
+            dispose();
+            callback(inputText.value);
+        }
+        lastKeyDown = -1;
+    });
+    inputWindow.addEventListener('keydown', function(event) {
+        // console.log('keydown', event.key, event.keyCode);
+        lastKeyDown = event.keyCode;
     });
     if(doFocus) {
         inputText.focus();
