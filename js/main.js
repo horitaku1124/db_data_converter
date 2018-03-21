@@ -2,6 +2,7 @@
 
 const assert = require('assert');
 const QueryParser = require('../js/query_parser');
+const PluginRemoveNulls = require('../js/plugin_removenulls');
 
 let headerCells;
 let bodyData;
@@ -9,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('loaded2');
     let performFromWb = document.getElementById('perform_from_wb');
     let performFromSql = document.getElementById('perform_from_sql');
+    let performRemoveNull = document.getElementById('perform_remove_null');
     let outputText = document.getElementById('outputText');
     let generate = document.getElementById('generate');
     performFromWb.addEventListener('click', (e) => {
@@ -19,6 +21,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     generate.addEventListener('click', (e) => {
         onGenerate();
+    });
+    performRemoveNull.addEventListener('click', (e) => {
+        let plugin = new PluginRemoveNulls;
+        let [newHeaderCells, newBodyData] = plugin.performe(headerCells, bodyData, SQLValue_NULL);
+        headerCells = newHeaderCells;
+        bodyData = newBodyData;
+
+        createDataTable(headerCells, bodyData);
     });
     outputText.addEventListener('dblclick', (e) => {
         console.log("dblclick", this);
