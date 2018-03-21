@@ -6,7 +6,7 @@ module.exports = class PluginRemoveNulls {
         let toRemoveCols = [];
         for (let i = 0;i < headerCells.length;i++) {
             let everyNull = bodyData.every(e => e[i].type === SQLValue_NULL);
-            if (everyNull) {
+            if (bodyData.length > 0 && everyNull) {
                 toRemoveCols.push(i);
             } else {
                 newHeaderCells.push(headerCells[i]);

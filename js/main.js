@@ -1,6 +1,5 @@
 "use strict";
 
-const assert = require('assert');
 const QueryParser = require('../js/query_parser');
 const PluginRemoveNulls = require('../js/plugin_removenulls');
 
