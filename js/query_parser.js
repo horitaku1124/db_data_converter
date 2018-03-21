@@ -4,7 +4,7 @@ const constant = require('../js/node_constant');
 const Node = require('../js/query_node');
 
 module.exports = class QueryParser {
-    constructor(global)
+    constructor(global = [])
     {
         this._global = global;
     }

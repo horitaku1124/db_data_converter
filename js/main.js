@@ -62,7 +62,7 @@ function onPerform() {
 }
 function onPerformSql() {
     let sql = document.getElementById('inputSection').value;
-    let parser = new QueryParser([]);
+    let parser = new QueryParser();
     let parseResultList = parser.convert(sql);
 
     let newBodyData = [];
