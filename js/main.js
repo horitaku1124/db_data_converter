@@ -2,6 +2,7 @@
 
 const QueryParser = require('../js/query_parser');
 const PluginRemoveNulls = require('../js/plugin_removenulls');
+const SeparatedValue = require('../js/separated_value');
 
 let headerCells;
 let bodyData;
@@ -49,7 +50,7 @@ function onPerform() {
 
     for (let i = 1;i < lines.length;i++) {
         if (lines[i] === '') continue;
-        let cells = lines[i].split(', ');
+        let cells = SeparatedValue.parse(lines[i]);
         cells = cells.map(e => {
             let value = e.toUpperCase();
             let type = SQLValue_STRING;
