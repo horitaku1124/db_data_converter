@@ -10,9 +10,15 @@ module.exports = class SeparatedValue {
             let char = str.substring(i, i + 1);
             if (char === '\'') {
                 if (inSingleQuote) {
+                    if (str.length - 1 === i) {
+                        columns.push("'" + textBuff + "'");
+                        textBuff = "";
+                        continue;
+                    }
                     let nextChar = str.substring(i + 1, i + 2);
+
                     if (nextChar === ',') {
-                        columns.push(textBuff);
+                        columns.push("'" + textBuff + "'");
                         textBuff = "";
 
                         i++;
@@ -21,16 +27,32 @@ module.exports = class SeparatedValue {
                             i++;
                         }
                     }
+                    inSingleQuote = false;
                 } else {
-
+                    inSingleQuote = true;
                 }
-                inSingleQuote = true;
+            } else if (inSingleQuote) {
+                textBuff += char;
             } else {
                 textBuff += char;
+                let nextChar = str.substring(i + 1, i + 2);
+                if (nextChar === ',') {
+                    columns.push(textBuff);
+                    textBuff = '';
+                    i++;
+                    let nextNextChar = str.substring(i + 1, i + 2);
+                    if (nextNextChar === ' ') {
+                        i++;
+                    }
+                }
             }
         }
         if (textBuff !== '') {
-            columns.push(textBuff);
+            if (inSingleQuote) {
+                columns.push("'" + textBuff + "'");
+            } else {
+                columns.push(textBuff);
+            }
         }
         return columns;
     }
