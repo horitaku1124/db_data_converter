@@ -44,7 +44,6 @@ module.exports = class QueryParser {
                 break;
             default:
                 throw Error("error");
-                break;
         }
 
         if(root.type === constant.NODE_TYPE_SELECT || root.type === constant.NODE_TYPE_INSERT){
@@ -126,7 +125,7 @@ module.exports = class QueryParser {
                     root.addChild(valuesNode);
                     nestDepth--;
                 }
-                if(/[a-zA-Z0-9\_]+/.test(column)) {
+                if(/[a-zA-Z0-9_]+/.test(column)) {
                     let next = queryTokens.values[i + 1] !== undefined ? queryTokens.values[i + 1] : null;
                     let next2 = queryTokens.values[i + 2] !== undefined ? queryTokens.values[i + 2] : null;
                     if(next === "(" && next2 === ")") {
