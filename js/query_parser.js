@@ -252,7 +252,7 @@ module.exports = class QueryParser {
             QueryParser.exeVerse(queryType, queryTokens, verse);
         }
         if (queryTokens.columns.length > 0 && queryTokens.values.length > 0) {
-            queryTokensList.push([type, queryTokens]);
+            queryTokensList.push([queryType, queryTokens]);
         }
 
         let parseResultList = [];

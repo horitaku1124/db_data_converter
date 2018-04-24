@@ -5,7 +5,7 @@ const queryParser = require('../js/query_parser');
 const pluginRemoveNulls = require('../js/plugin_removenulls.js');
 
 describe('Testing Query Parser', () => {
-    it('Parse Insert Query', () => {
+    it('Parse Insert Query ends semicolon', () => {
         let qp = new queryParser({});
         let result = qp.convert("INSERT INTO table1(a,b) VALUES (1,2);");
         assert(result.length === 1);
@@ -25,6 +25,41 @@ describe('Testing Query Parser', () => {
         assert(result[0].selectors[0] === 'a');
         assert(result[0].records.length === 2);
         assert(result[0].records[1][1] === '4');
+    });
+    it('Parse Insert Query no semicolon', () => {
+        let qp = new queryParser({});
+        let result = qp.convert("INSERT INTO table1(a,b) VALUES (1,2) ");
+        assert(result.length === 1);
+        assert(result[0].into === 'table1');
+        assert(result[0].selectors.length === 2);
+        assert(result[0].selectors[0] === 'a');
+        assert(result[0].selectors[1] === 'b');
+        assert(result[0].records.length === 1);
+        assert(result[0].records[0][0] === '1');
+        assert(result[0].records[0][1] === '2');
+
+
+        result = qp.convert("INSERT INTO table2(a,b) VALUES (1,2),(3,4)");
+        assert(result.length === 1);
+        assert(result[0].into === 'table2');
+        assert(result[0].selectors.length === 2);
+        assert(result[0].selectors[0] === 'a');
+        assert(result[0].records.length === 2);
+        assert(result[0].records[1][1] === '4');
+    });
+    it('Parse Insert Query has several format', () => {
+        let qp = new queryParser({});
+        let result = qp.convert("INSERT INTO table1(`a`,b,c) VALUES (1,'abc',null) ");
+        assert.equal(result.length, 1);
+        assert.equal(result[0].selectors.length, 3);
+        assert.equal(result[0].records.length, 1);
+        assert.equal(result[0].records[0].length, 3);
+
+        result = qp.convert("INSERT INTO `table1`(`id`,`name`) VALUES (1,'aiueo'),(2,'kakiki'),(3,'sasisu');");
+        assert.equal(result.length, 1);
+        assert.equal(result[0].selectors.length, 2);
+        assert.equal(result[0].records.length, 3);
+        assert.equal(result[0].records[0].length, 2);
     });
 });
 const NullValue = Symbol('NULL');
