@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     generate.addEventListener('click', (e) => {
         onGenerate();
+        outputText.addEventListener('dblclick', doubleclickSelectAll);
     });
     performRemoveNull.addEventListener('click', (e) => {
         let plugin = new PluginRemoveNulls;
@@ -30,13 +31,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         createDataTable(headerCells, bodyData);
     });
-    outputText.addEventListener('dblclick', (e) => {
-        console.log("dblclick", this);
+    let doubleclickSelectAll = () => {
+        console.log("outputText.dblclick", this);
         let range = document.createRange();
         range.selectNode(outputText);
         window.getSelection().removeAllRanges();
         window.getSelection().addRange(range);
-    });
+    }
 });
 
 
