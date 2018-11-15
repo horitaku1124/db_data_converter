@@ -56,15 +56,19 @@
     border: 1px solid #aaa;
     width: 40px;
     min-width: 80px;
+    max-width: 150px;
+    text-overflow: ellipsis;
+    overflow: hidden;
     padding: 3px 10px 3px 3px;
 }
 #displayTable > table > * > tr > td{
     position: relative;
+    word-break: keep-all;
 }
 #displayTable > table > * > tr > td .editable{
     box-sizing: border-box;
     width: 100%;
-    min-width: 40px;
+    min-width: 80px;
 }
 #displayTable > table > * > tr:nth-child(2n) > td {
     background-color: #fef9ff;
