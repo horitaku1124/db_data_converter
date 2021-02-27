@@ -12,15 +12,20 @@ document.addEventListener('DOMContentLoaded', () => {
     let performFromSql = document.getElementById('perform_from_sql');
     let performRemoveNull = document.getElementById('perform_remove_null');
     let outputText = document.getElementById('outputText');
-    let generate = document.getElementById('generate');
+    let generateSQL = document.getElementById('generate_sql');
+    let generateFactory = document.getElementById('generate_factory');
     performFromWb.addEventListener('click', (e) => {
         onPerform();
     });
     performFromSql.addEventListener('click', (e) => {
         onPerformSql();
     });
-    generate.addEventListener('click', (e) => {
-        onGenerate();
+    generateSQL.addEventListener('click', (e) => {
+        onGenerateSql();
+        outputText.addEventListener('dblclick', doubleclickSelectAll);
+    });
+    generateFactory.addEventListener('click', (e) => {
+        onGenerateFactory();
         outputText.addEventListener('dblclick', doubleclickSelectAll);
     });
     performRemoveNull.addEventListener('click', (e) => {
@@ -247,10 +252,11 @@ function createDataTable(header, body) {
     document.getElementById('displayTable').innerHTML = '';
 
     document.getElementById('displayTable').appendChild(displayTable);
-    document.getElementById('generate').removeAttribute('disabled');
+    document.getElementById('generate_sql').removeAttribute('disabled');
+    document.getElementById('generate_factory').removeAttribute('disabled');
 }
 
-function onGenerate() {
+function onGenerateSql() {
     let combineToOneQuery = document.querySelector('#combine_1_query').checked;
     let tableName = document.getElementById('table_name').value;
     let insertSql = "INSERT INTO `" + tableName + "` (";
@@ -295,6 +301,38 @@ function onGenerate() {
     }
     document.getElementById('outputText').innerHTML = outputSql;
 }
+
+function onGenerateFactory() {
+    const varName = "$instance";
+    let tableName = document.getElementById('table_name').value;
+    let className = snakeToCamel(tableName);
+    let outputFactory = "";
+
+    bodyData.forEach(row => {
+        outputFactory += varName + " = new " + className + ";\n";
+
+        for (let i = 0;i < headerCells.length;i++) {
+            outputFactory += varName + "->" + headerCells[i] + " = ";
+            outputFactory += (e => {
+                if (e.type === SQLValue_NULL) {
+                    return "NULL";
+                } else if (e.type === SQLValue_FUNCTION) {
+                    return e.value;
+                } else if (e.type === SQLValue_NUMBER) {
+                    return e.value;
+                } else {
+                    e = e.value.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                    return "'" + e + "'";
+                }
+            })(row[i]);
+            outputFactory += ";\n";
+        }
+        outputFactory += "\n";
+    })
+
+    document.getElementById('outputText').innerHTML = outputFactory;
+}
+
 let onMouseTd = null;
 function mouseOverEvent(event) {
     let td = this;
@@ -341,6 +379,13 @@ function removeClass(target, className) {
     let classValue = target.getAttribute('class');
     classValue = classValue.split(' ').filter(e => e !== className).join(' ');
     target.setAttribute('class', classValue);
+}
+
+function snakeToCamel(str) {
+    const cols = str.split(/_/);
+    return cols.map(s => {
+       return s.length > 0 ? s[0].toUpperCase() + s.substr(1) : ''
+    }).join("")
 }
 
 const SQLValue_NULL     = Symbol('NULL'),
