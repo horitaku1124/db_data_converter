@@ -17,6 +17,6 @@
   },
   "homepage": "https://github.com/horitaku1124/db_data_converter#readme",
   "devDependencies": {
-    "mocha": "^9.0.2"
+    "mocha": "^9.0.3"
   }
 }
