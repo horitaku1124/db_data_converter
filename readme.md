@@ -2,7 +2,7 @@ DB Data Converter
 ------------------
 
 ## How to use
-opem index.hmtl in your Browser
+open index.html in your Browser
 
 
 ```bash

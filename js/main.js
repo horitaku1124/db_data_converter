@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let outputText = document.getElementById('outputText');
     let generateSQL = document.getElementById('generate_sql');
     let generateFactory = document.getElementById('generate_factory');
+    let generateXml = document.getElementById('generate_xml');
     performFromWb.addEventListener('click', (e) => {
         onPerform();
     });
@@ -26,6 +27,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     generateFactory.addEventListener('click', (e) => {
         onGenerateFactory();
+        outputText.addEventListener('dblclick', doubleclickSelectAll);
+    });
+    generateXml.addEventListener('click', (e) => {
+        onGenerateXml();
         outputText.addEventListener('dblclick', doubleclickSelectAll);
     });
     performRemoveNull.addEventListener('click', (e) => {
@@ -254,6 +259,7 @@ function createDataTable(header, body) {
     document.getElementById('displayTable').appendChild(displayTable);
     document.getElementById('generate_sql').removeAttribute('disabled');
     document.getElementById('generate_factory').removeAttribute('disabled');
+    document.getElementById('generate_xml').removeAttribute('disabled');
 }
 
 function onGenerateSql() {
@@ -330,6 +336,41 @@ function onGenerateFactory() {
         outputFactory += "\n";
     })
 
+    document.getElementById('outputText').innerHTML = outputFactory;
+}
+function onGenerateXml() {
+    const varName = "$instance";
+    let tableName = document.getElementById('table_name').value;
+    let className = snakeToCamel(tableName);
+    let outputFactory = `<?xml version="1.0" encoding="UTF-8"?>
+<dataset>\n`;
+
+    bodyData.forEach(row => {
+        outputFactory += "  <" + tableName + "\n";
+
+        for (let i = 0;i < headerCells.length;i++) {
+            outputFactory += "    " + headerCells[i] + "=\"";
+            outputFactory += (e => {
+                if (e.type === SQLValue_NULL) {
+                    return "NULL";
+                } else if (e.type === SQLValue_FUNCTION) {
+                    return e.value;
+                } else if (e.type === SQLValue_NUMBER) {
+                    return e.value;
+                } else {
+                    e = e.value.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                    return e;
+                }
+            })(row[i]);
+            outputFactory += "\"\n";
+        }
+        outputFactory += "  />\n";
+    });
+    outputFactory += `</dataset>`;
+
+    outputFactory = outputFactory
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
     document.getElementById('outputText').innerHTML = outputFactory;
 }
 
