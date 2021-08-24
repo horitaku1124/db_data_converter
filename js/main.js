@@ -349,20 +349,18 @@ function onGenerateXml() {
         outputFactory += "  <" + tableName + "\n";
 
         for (let i = 0;i < headerCells.length;i++) {
-            outputFactory += "    " + headerCells[i] + "=\"";
-            outputFactory += (e => {
-                if (e.type === SQLValue_NULL) {
-                    return "NULL";
-                } else if (e.type === SQLValue_FUNCTION) {
-                    return e.value;
-                } else if (e.type === SQLValue_NUMBER) {
-                    return e.value;
+            const e = row[i];
+            if (e.type !== SQLValue_NULL) {
+                outputFactory += "    " + headerCells[i] + "=\"";
+                if (e.type === SQLValue_STRING) {
+                    outputFactory += e.value
+                        .replace(/</g, '&lt;')
+                        .replace(/>/g, '&gt;');
                 } else {
-                    e = e.value.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-                    return e;
+                    outputFactory += e.value;
                 }
-            })(row[i]);
-            outputFactory += "\"\n";
+                outputFactory += "\"\n";
+            }
         }
         outputFactory += "  />\n";
     });
