@@ -7,7 +7,7 @@
     height: 100px;
 }
 #outputText {
-    height: 100px;
+    height: 300px;
     overflow: scroll;
 }
 .hidden {

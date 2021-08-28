@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let generateSQL = document.getElementById('generate_sql');
     let generateFactory = document.getElementById('generate_factory');
     let generateXml = document.getElementById('generate_xml');
+    let generateXml2 = document.getElementById('generate_xml2');
     performFromWb.addEventListener('click', (e) => {
         onPerform();
     });
@@ -31,6 +32,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     generateXml.addEventListener('click', (e) => {
         onGenerateXml();
+        outputText.addEventListener('dblclick', doubleclickSelectAll);
+    });
+    generateXml2.addEventListener('click', (e) => {
+        onGenerateXml2();
         outputText.addEventListener('dblclick', doubleclickSelectAll);
     });
     performRemoveNull.addEventListener('click', (e) => {
@@ -260,6 +265,7 @@ function createDataTable(header, body) {
     document.getElementById('generate_sql').removeAttribute('disabled');
     document.getElementById('generate_factory').removeAttribute('disabled');
     document.getElementById('generate_xml').removeAttribute('disabled');
+    document.getElementById('generate_xml2').removeAttribute('disabled');
 }
 
 function onGenerateSql() {
@@ -364,6 +370,47 @@ function onGenerateXml() {
         }
         outputFactory += "  />\n";
     });
+    outputFactory += `</dataset>`;
+
+    outputFactory = outputFactory
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+    document.getElementById('outputText').innerHTML = outputFactory;
+}
+function onGenerateXml2() {
+    const varName = "$instance";
+    let tableName = document.getElementById('table_name').value;
+    let className = snakeToCamel(tableName);
+    let outputFactory = `<?xml version="1.0" encoding="UTF-8"?>
+<dataset>\n`;
+
+    outputFactory += `<table name="${tableName}">\n`;
+
+    for (let i = 0;i < headerCells.length;i++) {
+        outputFactory += "  <column>" + headerCells[i] + "</column>\n";
+    }
+    bodyData.forEach(row => {
+
+        outputFactory += "  <row>\n"
+        for (let i = 0;i < headerCells.length;i++) {
+            const e = row[i];
+            if (e.type !== SQLValue_NULL) {
+                outputFactory += "    <value>";
+                if (e.type === SQLValue_STRING) {
+                    outputFactory += e.value
+                        .replace(/</g, '&lt;')
+                        .replace(/>/g, '&gt;');
+                } else {
+                    outputFactory += e.value;
+                }
+                outputFactory += "</value>\n";
+            } else {
+                outputFactory += "    <null/>\n";
+            }
+        }
+        outputFactory += "  </row>\n"
+    });
+    outputFactory += `</table>\n`;
     outputFactory += `</dataset>`;
 
     outputFactory = outputFactory
