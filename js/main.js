@@ -399,7 +399,8 @@ function onGenerateXml2() {
                 if (e.type === SQLValue_STRING) {
                     outputFactory += e.value
                         .replace(/</g, '&lt;')
-                        .replace(/>/g, '&gt;');
+                        .replace(/>/g, '&gt;')
+                        .replace(/&/g, '&amp;');
                 } else {
                     outputFactory += e.value;
                 }
