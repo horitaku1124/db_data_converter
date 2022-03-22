@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let outputText = document.getElementById('outputText');
     let generateSQL = document.getElementById('generate_sql');
     let generateFactory = document.getElementById('generate_factory');
+    let generateFactory2 = document.getElementById('generate_factory2');
     let generateXml = document.getElementById('generate_xml');
     let generateXml2 = document.getElementById('generate_xml2');
     performFromWb.addEventListener('click', (e) => {
@@ -28,6 +29,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     generateFactory.addEventListener('click', (e) => {
         onGenerateFactory();
+        outputText.addEventListener('dblclick', doubleclickSelectAll);
+    });
+    generateFactory2.addEventListener('click', (e) => {
+        onGenerateFactory2();
         outputText.addEventListener('dblclick', doubleclickSelectAll);
     });
     generateXml.addEventListener('click', (e) => {
@@ -75,7 +80,7 @@ function onPerform() {
                 value = null;
             } else {
                 value = e.replace(/^'(.*)'$/, '$1').replace(/^"(.*)"$/, '$1');
-                if (/^\d+$/.test(value)) {
+                if (value === "0" || /^-?[1-9][\d\.]*$/.test(value)) {
                     type = SQLValue_NUMBER;
                 }
             }
@@ -101,7 +106,7 @@ function onPerformSql() {
                     cell = null;
                 } else if (/^\S+\(\)$/.test(cell)) {
                     type = SQLValue_FUNCTION;
-                } else if (/^\d+$/.test(cell)) {
+                } else if (cell === "0" || /^-?[1-9][\d\.]*$/.test(cell)) {
                     type = SQLValue_NUMBER;
                 }
                 return new SQLValue(cell, type)
@@ -264,6 +269,7 @@ function createDataTable(header, body) {
     document.getElementById('displayTable').appendChild(displayTable);
     document.getElementById('generate_sql').removeAttribute('disabled');
     document.getElementById('generate_factory').removeAttribute('disabled');
+    document.getElementById('generate_factory2').removeAttribute('disabled');
     document.getElementById('generate_xml').removeAttribute('disabled');
     document.getElementById('generate_xml2').removeAttribute('disabled');
 }
@@ -344,6 +350,34 @@ function onGenerateFactory() {
 
     document.getElementById('outputText').innerHTML = outputFactory;
 }
+
+
+function onGenerateFactory2() {
+    let outputFactory = "";
+
+    bodyData.forEach(row => {
+        for (let i = 0;i < headerCells.length;i++) {
+            outputFactory += "\"" + headerCells[i] + "\" => ";
+            outputFactory += (e => {
+                if (e.type === SQLValue_NULL) {
+                    return "NULL";
+                } else if (e.type === SQLValue_FUNCTION) {
+                    return e.value;
+                } else if (e.type === SQLValue_NUMBER) {
+                    return e.value;
+                } else {
+                    e = e.value.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                    return "\"" + e + "\"";
+                }
+            })(row[i]);
+            outputFactory += ",\n";
+        }
+        outputFactory += "\n";
+    })
+
+    document.getElementById('outputText').innerHTML = outputFactory;
+}
+
 function onGenerateXml() {
     const varName = "$instance";
     let tableName = document.getElementById('table_name').value;
