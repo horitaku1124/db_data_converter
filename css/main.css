@@ -58,10 +58,10 @@
     min-width: 80px;
     max-width: 150px;
     text-overflow: ellipsis;
-    overflow: hidden;
     padding: 3px 10px 3px 3px;
 }
 #displayTable > table > * > tr > td{
+    overflow: hidden;
     position: relative;
     word-break: keep-all;
 }
