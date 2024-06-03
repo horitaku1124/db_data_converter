@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('loaded2');
     let performFromWb = document.getElementById('perform_from_wb');
     let performFromSql = document.getElementById('perform_from_sql');
+    let performFromTsv = document.getElementById('perform_from_tsv');
     let performRemoveNull = document.getElementById('perform_remove_null');
     let outputText = document.getElementById('outputText');
     let generateSQL = document.getElementById('generate_sql');
@@ -22,6 +23,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     performFromSql.addEventListener('click', (e) => {
         onPerformSql();
+    });
+    performFromTsv.addEventListener('click', (e) => {
+        onPerformTsv();
     });
     generateSQL.addEventListener('click', (e) => {
         onGenerateSql();
@@ -118,6 +122,36 @@ function onPerformSql() {
 
     headerCells = parseResultList[0].selectors;
     document.getElementById('table_name').value = parseResultList[0].into;
+    createDataTable(headerCells, bodyData);
+}
+function onPerformTsv() {
+    let inputText = document.getElementById('inputSection').value;
+    let lines = inputText.split('\n');
+    let header = lines[0];
+    headerCells = header.split('\t');
+
+    bodyData = [];
+
+    for (let i = 1;i < lines.length;i++) {
+        if (lines[i] === '') continue;
+        let cells = lines[i].split('\t');
+        cells = cells.map(e => {
+            let value = e.toUpperCase();
+            let type = SQLValue_STRING;
+            if (value === '') {
+                type = SQLValue_NULL;
+                value = null;
+            } else {
+                value = e.replace(/^'(.*)'$/, '$1').replace(/^"(.*)"$/, '$1');
+                if (value === "0" || /^-?[1-9][\d\.]*$/.test(value)) {
+                    type = SQLValue_NUMBER;
+                }
+            }
+            return new SQLValue(value, type);
+        });
+        bodyData.push(cells);
+    }
+
     createDataTable(headerCells, bodyData);
 }
 
